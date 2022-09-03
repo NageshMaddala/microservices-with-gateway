@@ -6,3 +6,4 @@
 /src/.vs/microservices/v17
 /src/Services/Catalog/Catalog.API/bin/Debug/net5.0
 /src/Services/Catalog/Catalog.API/obj
+/src/Services/Catalog/Catalog.API/bin/Debug/net6.0
