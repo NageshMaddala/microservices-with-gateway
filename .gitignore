@@ -6,4 +6,11 @@
 /src/.vs/microservices/v17
 /src/Services/Catalog/Catalog.API/bin/Debug/net5.0
 /src/Services/Catalog/Catalog.API/obj
+/src/Services/Catalog/Catalog.API/bin/Debug/net6.0
+/src/.vs/microservices/FileContentIndex/read.lock
+/src/.vs/microservices/FileContentIndex/a086b139-a243-464c-a5e5-ff3db4a9fd0f.vsidx
+/src/.vs
+/src/obj/Docker
+/src/bin/Debug
+/src/obj/Debug
 /src/.vs
