@@ -11,3 +11,5 @@
 /src/.vs/microservices/FileContentIndex/a086b139-a243-464c-a5e5-ff3db4a9fd0f.vsidx
 /src/.vs
 /src/obj/Docker
+/src/bin/Debug
+/src/obj/Debug
