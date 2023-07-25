@@ -19,3 +19,5 @@
 /src-mango/Mango.Services.CouponAPI/bin/Debug/net8.0
 /src-mango/Mango.Services.CouponAPI/obj
 /src-mango/.vs/ProjectEvaluation
+/src-mango/Mango.Web/obj
+/src-mango/Mango.Web/bin/Debug/net8.0
