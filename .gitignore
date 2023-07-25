@@ -15,3 +15,7 @@
 /src/obj/Debug
 /src/.vs
 /src-mango/.vs/mango/v17
+/src-mango/.vs/mango
+/src-mango/Mango.Services.CouponAPI/bin/Debug/net8.0
+/src-mango/Mango.Services.CouponAPI/obj
+/src-mango/.vs/ProjectEvaluation
