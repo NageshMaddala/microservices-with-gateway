@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Mango.Services.CouponAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/coupon")]
     [ApiController]
     public class CouponAPIController : ControllerBase
     {
@@ -123,7 +123,7 @@ namespace Mango.Services.CouponAPI.Controllers
 
                 // EF would update coupon based on coupon id
                 _db.Coupons.Update(obj);
-                
+
                 // to persist change, it runs query here
                 _db.SaveChanges();
 
@@ -140,7 +140,8 @@ namespace Mango.Services.CouponAPI.Controllers
         }
 
         [HttpDelete]
-        public ResponseDto DeleteCoupon(int id)
+        [Route("{id:int}")]
+        public ResponseDto Delete(int id)
         {
             try
             {
