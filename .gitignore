@@ -24,3 +24,6 @@
 /Mango_Microservices-master/Mango_Microservices-master
 /course_19
 /src-mango/Mango.Web/bin/Debug/net6.0
+/src-mango/Mango.Services.AuthAPI/bin/Debug/net7.0
+/src-mango/Mango.Services.AuthAPI/obj
+/src-mango/Mango.Services.CouponAPI/bin/Debug/net7.0
