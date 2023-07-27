@@ -33,6 +33,28 @@ namespace Mango.Services.AuthAPI.Services
             _jwtTokenGenerator = jwtTokenGenerator;
         }
 
+        // RoleManager would help us adding roles in database
+        public async Task<bool> AssignRole(string email, string roleName)
+        {
+            // retrieve user first based on email
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == email.ToLower());
+
+            if(user != null)
+            {
+                // check if role already exists
+
+                // below line would make it as sync
+                if(!_roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
+                {
+                    // create role if it doesn't exist
+                    _roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
+                }
+                await _userManager.AddToRoleAsync(user, roleName);
+                return true;
+            }
+            return false;
+        }
+
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDto.UserName.ToLower());
