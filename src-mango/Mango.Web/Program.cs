@@ -14,17 +14,20 @@ builder.Services.AddHttpClient();
 
 // this is to indicate that CouponService will be using httpclient
 builder.Services.AddHttpClient<ICouponService, CouponService>();
+builder.Services.AddHttpClient<IProductService, ProductService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 
 #pragma warning disable CS8601 // Possible null reference assignment.
 SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
 SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
+SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
 #pragma warning restore CS8601 // Possible null reference assignment.
 
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 // Below pipeline is to support authentication along with line 53
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
