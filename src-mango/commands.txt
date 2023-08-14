@@ -1,0 +1,4 @@
+Migration Commands
+
+add-migration AddNameToAspnetUsers
+save-database -- for saving changes
