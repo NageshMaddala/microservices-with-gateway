@@ -13,13 +13,16 @@ builder.Services.AddHttpClient();
 
 // this is to indicate that CouponService will be using httpclient
 builder.Services.AddHttpClient<ICouponService, CouponService>();
+builder.Services.AddHttpClient<IAuthService, AuthService>();
 
 #pragma warning disable CS8601 // Possible null reference assignment.
 SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
+SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
 #pragma warning restore CS8601 // Possible null reference assignment.
 
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
