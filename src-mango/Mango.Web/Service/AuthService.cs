@@ -34,7 +34,7 @@ namespace Mango.Web.Service
                 ApiType = SD.ApiType.POST,
                 Data = loginRequestDto,
                 Url = SD.AuthAPIBase + "/api/auth/login"
-            });
+            }, withBearer:false);
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
@@ -46,7 +46,7 @@ namespace Mango.Web.Service
                 ApiType = SD.ApiType.POST,
                 Data = registrationRequestDto,
                 Url = SD.AuthAPIBase + "/api/auth/register"
-            });
+            }, withBearer: false);
 #pragma warning restore CS8603 // Possible null reference return.
         }
     }
