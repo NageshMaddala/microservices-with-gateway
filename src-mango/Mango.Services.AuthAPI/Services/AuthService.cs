@@ -70,8 +70,11 @@ namespace Mango.Services.AuthAPI.Services
                 };
             }
 
+            // built in .net identity api
+            var roles = await _userManager.GetRolesAsync(user);
+
             // if user was found, Generate JWT Token and send it back to caller
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            var token = _jwtTokenGenerator.GenerateToken(user, roles);
 
             UserDto userDto = new UserDto()
             {
