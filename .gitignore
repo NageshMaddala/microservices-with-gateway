@@ -29,3 +29,5 @@
 /src-mango/Mango.Services.CouponAPI/bin/Debug/net7.0
 /src-mango/Mango.Services.ProductAPI/bin/Debug/net7.0
 /src-mango/Mango.Services.ProductAPI/obj
+/src-mango/Mango.Services.ShoppingCartAPI/bin/Debug/net7.0
+/src-mango/Mango.Services.ShoppingCartAPI/obj
