@@ -31,3 +31,5 @@
 /src-mango/Mango.Services.ProductAPI/obj
 /src-mango/Mango.Services.ShoppingCartAPI/bin/Debug/net7.0
 /src-mango/Mango.Services.ShoppingCartAPI/obj
+/src-mango/Mango.MessageBus/bin/Debug/net7.0
+/src-mango/Mango.MessageBus/obj
