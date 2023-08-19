@@ -32,8 +32,11 @@ builder.Services.AddHttpClient("Product", u => u.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
 
 // Another way of adding http client to the project
-builder.Services.AddHttpClient("Coupon", u => u.BaseAddress =
-new Uri(builder.Configuration["ServiceUrls:CouponAPI"]));
+builder.Services.AddHttpClient("Coupon",
+    u =>
+    {
+        u.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CouponAPI"]);
+    });
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
