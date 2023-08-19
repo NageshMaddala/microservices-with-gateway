@@ -2,3 +2,21 @@ Migration Commands
 
 add-migration AddNameToAspnetUsers
 save-database -- for saving changes
+
+
+Communication (sync/async)
+
+Synchronous Communication -
+- Sync communication was never a problem in relatively small monolithic applications because
+  it is a very simple concept to reason about
+- The client sends a request to the server, and the server responds to the client.
+- An advantage of sync communication is that the service receives an ack that the request was received
+  and the corresponding action was exectuted
+
+Async Commnication -
+- When using async communication, the calling service does not wait for a response from the called service
+- Async communication also allows the possibility of One to Many communication, where a client can send a 
+  message to multiple services at once
+
+In the arch diagram, solid lines are sync commnication
+and dotted line are async communication 
