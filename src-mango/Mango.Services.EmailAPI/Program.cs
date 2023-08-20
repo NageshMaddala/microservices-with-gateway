@@ -1,17 +1,8 @@
-/*
- * Brief Note: The net identity is a package that will create all the identity
- * related tables automatically with entity framework core. That requires
- * setting up entity framework, core and dbcontext.
- */
-
-using Mango.MessageBus;
-using Mango.Services.AuthAPI.Data;
-using Mango.Services.AuthAPI.Models;
-using Mango.Services.AuthAPI.Services;
-using Mango.Services.AuthAPI.Services.IService;
-using Microsoft.AspNetCore.Identity;
+using Mango.Services.EmailAPI.Data;
+using Mango.Services.EmailAPI.Extension;
+using Mango.Services.EmailAPI.Messaging;
+using Mango.Services.EmailAPI.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,25 +13,17 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-// Read appsettings section to jwtoptions class
-// This will automation setup JwtOptions, we can read everything from JwtOptions using di
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
+var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddSingleton(new EmailService(optionsBuilder.Options));
 
-// setup identity
-// 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-       .AddEntityFrameworkStores<AppDbContext>()
-       .AddDefaultTokenProviders();
+// Note: we cannot consume scoped service in singleton
+// so creating another instance of appdbcontext
+builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 
 builder.Services.AddControllers();
-
-builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IMessageBus, MessageBus>();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -54,14 +37,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Add authentication to pipeline
-app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
 
 ApplyMigration();
+
+app.UseAzureServiceBusConsumer();
 
 app.Run();
 
