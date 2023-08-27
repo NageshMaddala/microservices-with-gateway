@@ -1,12 +1,13 @@
 using AutoMapper;
-using Mango.Services.CouponAPI;
-using Mango.Services.CouponAPI.Data;
-using Mango.Services.CouponAPI.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Mango.MessageBus;
+using Mango.Services.OrderAPI;
+using Mango.Services.OrderAPI.Data;
+using Mango.Services.OrderAPI.Extensions;
+using Mango.Services.OrderAPI.Service;
+using Mango.Services.OrderAPI.Service.IService;
+using Mango.Services.OrderAPI.Utility;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,17 @@ builder.Services.AddSingleton(mapper);
 // To use automapper in the project/controllers 
 // we need to register, below line does that
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped<IProductService, ProductService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+builder.Services.AddScoped<IMessageBus, MessageBus>();
+
+// Another way of adding http client to the project
+// Below will make sure token is passed to other endpoints
+builder.Services.AddHttpClient("Product", u => u.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -70,7 +82,6 @@ if (app.Environment.IsDevelopment())
 
 Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
-
 app.UseHttpsRedirection();
 
 // this will make sure it will set IPricipal
@@ -92,7 +103,7 @@ void ApplyMigration()
     {
         var _db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-        if(_db.Database.GetPendingMigrations().Count() > 0)
+        if (_db.Database.GetPendingMigrations().Count() > 0)
         {
             _db.Database.Migrate();
         }
