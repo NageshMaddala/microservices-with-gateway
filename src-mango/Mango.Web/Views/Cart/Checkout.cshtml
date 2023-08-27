@@ -1,4 +1,5 @@
-﻿@model CartDto
+﻿@using Mango.Web.Models;
+@model CartDto
 
 <form method="post">
     <input asp-for="CartHeader.UserId" hidden />
@@ -63,11 +64,11 @@
                                 </div>
 
                                 <div class="col-3" style="font-size:11px;">
-                                    <span style="font-size:17px;">@cartObj.Product.Price.ToString("c")</span>
+                                    <span style="font-size:17px;"> @cartObj.Product.Price.ToString("c")</span>
 
                                 </div>
                                 <div class="col-3" style="font-size:11px;">
-                                    <span style="font-size:17px;">@cartObj.Count</span>
+                                    <span style="font-size:17px;"> @cartObj.Count</span>
                                 </div>
                             </div>
                             <hr />
@@ -81,20 +82,22 @@
                                 }
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <div class="row">
 
-                                <div class="col-12 ">
-                                    <button type="submit" class="btn btn-success form-control ">
-                                        <span>Place Order</span>
-                                    </button>
-                                </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row">
+
+                            <div class="col-12 ">
+                                <button type="submit" class="btn btn-success form-control ">
+                                    <span>Place Order</span>
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </form>
 
 @section Scripts {

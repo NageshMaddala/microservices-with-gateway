@@ -1,5 +1,6 @@
 ﻿using Mango.Web.Models;
 using Mango.Web.Service.IService;
+using Mango.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -36,6 +37,7 @@ namespace Mango.Web.Controllers
         [ActionName("Checkout")]
         public async Task<IActionResult> Checkout(CartDto cartDto)
         {
+            #region Old Code
             // you can get cartDto as parameter
             // Or just query db to get latest 
 
@@ -51,12 +53,53 @@ namespace Mango.Web.Controllers
 
             OrderHeaderDto orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
 
-            if(response != null && response.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
                 // get stripe session and redirect to stripe to place order
+
+                var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+
+                StripeRequestDto stripeRequestDto = new()
+                {
+                    ApprovedUrl = domain + "cart/Confirmation?orderId=" + orderHeaderDto.OrderHeaderId,
+                    CancelUrl = domain + "cart/checkout",
+                    OrderHeader = orderHeaderDto
+                };
+
+                var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
+                StripeRequestDto stripeRespResult = JsonConvert.DeserializeObject<StripeRequestDto>(Convert.ToString(stripeResponse.Result));
+
+                Response.Headers.Add("Location", stripeRespResult.StripeSessionUrl);
+
+                // Denotes that there is a redirect to another page
+                return new StatusCodeResult(303);
+            }
+            #endregion
+            return View();
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Confirmation(int orderId)
+        {
+            // validate the stripe payment before we display confirmation page
+            // Also, when the order is placed, send message to queue and let that queue process
+            // and validate the orders
+            // for that we need to create another micro service, that is responsible for processing order
+            // or add listner to particular queue in order api
+
+            ResponseDto? response = await _orderService.ValidateStripeSession(orderId);
+            if (response != null & response.IsSuccess)
+            {
+                OrderHeaderDto orderHeader = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+
+                if(orderHeader.Status == SD.Status_Approved)
+                {
+                    return View(orderId);
+                }
             }
 
-            return View();
+            // redirect to some error page based on the status
+            return View(orderId);
         }
 
         private async Task<CartDto> LoadCartDtoBasedOnLoggedInUser()
