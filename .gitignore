@@ -37,3 +37,5 @@
 /src-mango/Mango.Services.EmailAPI/obj
 /src-mango/Mango.Services.OrderAPI/bin/Debug/net7.0
 /src-mango/Mango.Services.OrderAPI/obj
+/src-mango/Mango.Services.RewardsAPI/obj
+/src-mango/Mango.Services.RewardsAPI/bin/Debug/net7.0
