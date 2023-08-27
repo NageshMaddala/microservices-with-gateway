@@ -1,4 +1,7 @@
 using Mango.Services.RewardsAPI.Data;
+using Mango.Services.RewardsAPI.Extension;
+using Mango.Services.RewardsAPI.Messaging;
+using Mango.Services.RewardsAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +12,15 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+optionsBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.Services.AddSingleton(new RewardService(optionsBuilder.Options));
+
+// Note: we cannot consume scoped service in singleton
+// so creating another instance of appdbcontext
+builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
+
 
 // Add services to the container.
 
@@ -33,6 +45,8 @@ app.UseAuthorization();
 app.MapControllers();
 
 ApplyMigration();
+
+app.UseAzureServiceBusConsumer();
 
 app.Run();
 
