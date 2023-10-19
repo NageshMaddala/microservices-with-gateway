@@ -65,19 +65,43 @@ namespace Mango.Services.ProductAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
-        public ResponseDto Post([FromBody] ProductDto ProductDto)
+        public ResponseDto Post(ProductDto productDto)
         {
             try
             {
                 // convert dto to Product entity
-                Product obj = _mapper.Map<Product>(ProductDto);
+                Product product = _mapper.Map<Product>(productDto);
 
                 // add record to Product table
-                _db.Products.Add(obj);
+                _db.Products.Add(product);
                 // to persist change, it runs query here
                 _db.SaveChanges();
 
-                _response.Result = _mapper.Map<ProductDto>(obj);
+                if(productDto.Image != null)
+                {
+                    string fileName = product.ProductId + Path.GetExtension(productDto.Image.FileName);
+                    string filePath = @"wwwroot\ProductImages\" + fileName;
+
+                    var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                    using(var fileStream = new FileStream(filePathDirectory, FileMode.Create))
+                    {
+                        productDto.Image.CopyTo(fileStream);
+                    }
+
+                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                    product.ImageUrl = baseUrl + "/ProductImages/" + filePath;
+                    product.ImageLocalPath = filePath;
+                }
+                else
+                {
+                    product.ImageUrl = "https://placehold.co/600x400";
+                }
+
+                _db.Products.Update(product);
+                _db.SaveChanges();
+
+                _response.Result = _mapper.Map<ProductDto>(product);
 
             }
             catch (Exception ex)

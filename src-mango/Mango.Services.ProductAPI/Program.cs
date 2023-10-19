@@ -70,6 +70,8 @@ app.UseHttpsRedirection();
 // this will make sure it will set IPricipal
 app.UseAuthentication();
 app.UseAuthorization();
+// It will make sure app would look for images in wwwroot dir
+app.UseStaticFiles();
 
 app.MapControllers();
 
