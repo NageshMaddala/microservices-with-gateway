@@ -1,5 +1,6 @@
 ﻿using Mango.MessageBus;
 using Mango.Services.AuthAPI.Models.Dto;
+using Mango.Services.AuthAPI.RabbitMQSender;
 using Mango.Services.AuthAPI.Services.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,10 @@ namespace Mango.Services.AuthAPI.Controllers
     {
         private readonly IAuthService _authService;
         protected ResponseDto _response;
-        private readonly IMessageBus _messageBus;
+        private readonly IRabbitMQAuthMessageSender _messageBus;
         private readonly IConfiguration _configuration;
 
-        public AuthAPIController(IAuthService authService, IMessageBus messageBus, IConfiguration configuration)
+        public AuthAPIController(IAuthService authService, IRabbitMQAuthMessageSender messageBus, IConfiguration configuration)
         {
             _authService = authService;
             _messageBus = messageBus;
@@ -36,7 +37,11 @@ namespace Mango.Services.AuthAPI.Controllers
                 return BadRequest(_response);
             }
 
-            await _messageBus.PublishMessage(model.Email, _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue"));
+            //await _messageBus.PublishMessage(model.Email, _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue"));
+
+            // It's not async in rabbit mq so removed await
+            _messageBus.SendMessage(model.Email, _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue"));
+
             // everything is good 
             // just return response
             return Ok(_response);

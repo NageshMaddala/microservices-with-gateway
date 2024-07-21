@@ -25,3 +25,21 @@ mangomicroservice
 
 sqladmin
 admin123*
+
+rabbitmq@user.com
+Rabbit@123
+
+Rabbit mq notes:
+1. Install erlang , its a language pack rquired to run rabbitmq
+2. Install rabbitmq
+3. After installation, go to c:\Program Files\RabbitMQ Server\rabbitmq_server-3.13.5\sbin and enable rabbit mq management plugin
+-- just run below command
+
+c:\Program Files\RabbitMQ Server\rabbitmq_server-3.13.5\sbin rabbitmq-plugins enable rabbitmq_management
+
+https://www.rabbitmq.com/docs/management
+
+management UI can be accessed from http://localhost:15672/
+
+default login - guest, pwd - guest
+
